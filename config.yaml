@@ -11,7 +11,7 @@ env_action_constraints: 0.05
 # Model architecture
 model:
   layers:
-    - [32, false, 0.0]     
+    # - [32, false, 0.0]     
     - [24, false, 0.0]
     - [16, false, 0.0]
     - [12, false, 0.0]
