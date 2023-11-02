@@ -30,8 +30,8 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    The step method logs the rewards for the chosen actions:
    ``` python
    def step(self, experiences):
-    obs, reward, termination, truncation, info = experiences
-    self.rewards.append(reward)
+      obs, reward, termination, truncation, info = experiences
+      self.rewards.append(reward)
    ```
 3. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
    This is done in the learn method, where the discounted cumulative rewards are computed:
@@ -39,8 +39,8 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    R = 0 # Discounted return
    discounted_returns = [] # List of discounted returns
    for r in reversed(self.rewards): # Iterate in reverse order
-    R = r + self.gamma * R # Update discounted return
-    discounted_returns.insert(0, R) # Insert updated discounted return to the front
+      R = r + self.gamma * R # Update discounted return
+      discounted_returns.insert(0, R) # Insert updated discounted return to the front
    discounted_returns = torch.tensor(discounted_returns) # Convert to tensor
    discounted_returns = (discounted_returns - discounted_returns.mean()) / (discounted_returns.std() + 1e-5) # Normalize discounted returns
    ```
@@ -49,11 +49,16 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    # Calculating the policy loss
    policy_loss = [] # List to store the loss for each episode
    for log_prob, R in zip(self.log_probs, discounted_returns): # Iterate over the log probs and discounted returns
-    policy_loss.append(-log_prob * R) # Append the loss to the list
+      policy_loss.append(-log_prob * R) # Append the loss to the list
 
    policy_loss = torch.cat(policy_loss).sum() # Concatenate the loss and sum them up
    ```   
-5. Update the policy parameters using some variant of gradient ascent.
+5. Update the policy parameters using some variant of gradient ascent. This is performed with the optimizer, which updates the policy network's weights:
+   ``` python
+   self.optimizer.zero_grad()
+   policy_loss.backward()
+   self.optimizer.step()
+   ```   
 
 ### Licence
 This project is licensed under the MIT License.
