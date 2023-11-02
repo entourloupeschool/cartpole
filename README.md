@@ -33,7 +33,7 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
     obs, reward, termination, truncation, info = experiences
     self.rewards.append(reward)
    ```
-5. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
+4. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
    This is done in the learn method, where the discounted cumulative rewards are computed:
    ``` python
    R = 0 # Discounted return
@@ -44,9 +44,9 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    discounted_returns = torch.tensor(discounted_returns) # Convert to tensor
    discounted_returns = (discounted_returns - discounted_returns.mean()) / (discounted_returns.std() + 1e-5) # Normalize discounted returns
    ```
-7. Compute the policy gradient estimate using the rewards-to-go.
+5. Compute the policy gradient estimate using the rewards-to-go.
    
-9. Update the policy parameters using some variant of gradient ascent.
+6. Update the policy parameters using some variant of gradient ascent.
 
 ### Licence
 This project is licensed under the MIT License.
