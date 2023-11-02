@@ -2,6 +2,7 @@
 ## A reinforcement learning agent trained using the Vanilla Policy Gradient algorithm to solve the CartPole problem from OpenAI's gym.
 ### Introduction
 For a detailed introduction and background on the CartPole problem, please refer to [Gymnasium](https://gymnasium.farama.org/environments/classic_control/cart_pole/).
+![Alt text](https://cdn-images-1.medium.com/v2/resize:fit:1200/1*oMSg2_mKguAGKy1C64UFlw.gif)
 ### Vanilla Policy Gradient
 The Vanilla Policy Gradient (VPG), also known as REINFORCE, is a foundational algorithm in the realm of policy optimization methods. At its heart, VPG seeks to maximize the expected return by directly adjusting the agent's policy. The core idea revolves around increasing the probability of actions that result in higher returns and decreasing the probability of actions leading to lower returns.
 
