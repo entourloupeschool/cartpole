@@ -11,11 +11,13 @@ For a deeper dive into the mathematical intricacies and nuances of the VPG algor
 
 Here is a correlation of the VPG's pseudocode and the code in the agent's class:
 1. Initialize policy parameters θ
-   set up the policy network: weights are initialized with random values close to 0.
+   set up the policy network: The weights of this neural network are initialized with small random values, close to zero.
    ``` python
    self.policy = CustomModel(self.state_size, self.layers, self.action_size)
    ```
-2. Collect a set of trajectories by executing the current policy in the environment. This is achieved in the act method where actions are determined based on the current policy:
+2. Collect a set of trajectories by executing the current policy in the environment. It first converts the input state to a PyTorch tensor and processes it through the policy network to get the logits.
+    The logits are transformed to action probabilities using the softmax function.
+    An action is then sampled from the resulting categorical distribution and returned.
    ``` python
    def act(self, state):
       # Get action from policy network
@@ -27,14 +29,14 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
       action = action_distribution.sample()
       return action.item()
    ```
-   The step method logs the rewards for the chosen actions:
+   Whenever the agent interacts with the environment, it logs the reward it received for the action it took.
    ``` python
    def step(self, experiences):
       obs, reward, termination, truncation, info = experiences
       self.rewards.append(reward)
    ```
 3. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
-   This is done in the learn method, where the discounted cumulative rewards are computed:
+   In the learn method, it calculates the discounted cumulative rewards (rewards-to-go). These are essential for estimating the returns of an action given a state. It starts from the last reward and moves backward, computing the accumulated discounted reward for each time step. The returns are also normalized to have a mean of zero and a standard deviation of one. This normalization often helps stabilize the learning.
    ``` python
    R = 0 # Discounted return
    discounted_returns = [] # List of discounted returns
@@ -44,7 +46,7 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    discounted_returns = torch.tensor(discounted_returns) # Convert to tensor
    discounted_returns = (discounted_returns - discounted_returns.mean()) / (discounted_returns.std() + 1e-5) # Normalize discounted returns
    ```
-4. Compute the policy gradient estimate using the rewards-to-go. The policy gradient is estimated using the stored log probabilities and the computed discounted returns:
+4. Compute the policy gradient estimate using the rewards-to-go. This computes the policy gradient by iterating over the stored log probabilities and the computed discounted returns. Each episode's loss is calculated as the product of the negative log probability of the taken action and its discounted return. The objective is to increase the log probabilities of actions that led to good outcomes and decrease those that led to poor outcomes.
    ``` python
    # Calculating the policy loss
    policy_loss = [] # List to store the loss for each episode
