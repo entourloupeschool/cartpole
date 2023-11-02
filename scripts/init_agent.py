@@ -2,7 +2,7 @@ import torch
 from init_model import CustomModel
 import torch.nn as nn
 
-class Agent():
+class AgentVPG():
     """Interacts with and learns from the environment."""
     def __init__(self, state_size, action_size, config, device):
         self.state_size = state_size
