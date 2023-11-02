@@ -45,7 +45,8 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    discounted_returns = (discounted_returns - discounted_returns.mean()) / (discounted_returns.std() + 1e-5) # Normalize discounted returns
    ```
 7. Compute the policy gradient estimate using the rewards-to-go.
-8. Update the policy parameters using some variant of gradient ascent.
+   
+9. Update the policy parameters using some variant of gradient ascent.
 
 ### Licence
 This project is licensed under the MIT License.
