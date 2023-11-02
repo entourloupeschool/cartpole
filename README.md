@@ -11,8 +11,7 @@ For a deeper dive into the mathematical intricacies and nuances of the VPG algor
 
 Here is a correlation of the VPG's pseudocode and the code in the agent's class:
 1. Initialize policy parameters θ
-   set up the policy network:
-   weights are initialized with random values close to 0.
+   set up the policy network: weights are initialized with random values close to 0.
    ``` python
    self.policy = CustomModel(self.state_size, self.layers, self.action_size)
    ```
