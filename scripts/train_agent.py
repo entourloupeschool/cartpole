@@ -9,7 +9,6 @@ import math
 import numpy as np
 from init_agent import Agent
 from plot_utils import plot_metrics
-import matplotlib.pyplot as plt
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # Load the configuration file
@@ -55,7 +54,7 @@ total_neurons = 0
 # loop through the layers, and add the neurons
 for layer in config['model']['layers']:
     total_neurons += layer[0]
-# print("Total number of neurons: {}".format(total_neurons))
+print("Total number of neurons: {}".format(total_neurons))
 
 # scale learning rate with number of neurons
 config['optimizer']['learning_rate'] = config['optimizer']['learning_rate'] / \

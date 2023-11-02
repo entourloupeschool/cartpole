@@ -50,12 +50,12 @@ results_save_path: "./models/"
 show_plots: false
 
 # search for best hyperparameters
-sbhp_n_episodes: 1200
+sbhp_n_episodes: 351
 last_data: 600
 sbhp_render_mode: 
-lr_search: [0.0001, 0.0003, 0.0005, 0.0007]
+lr_search: [0.02, 0.015, 0.01, 0.005]
 eps_init_search: [2.0]
-gamma_search: [0.93, 0.95, 0.97, 0.99]
+gamma_search: [0.93, 0.97, 0.99, 99998]
 tau_search: [0.001]
 update_every_search: [4]
 

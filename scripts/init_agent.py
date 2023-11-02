@@ -11,13 +11,8 @@ class AgentVPG():
         # Policy network and optimizer
         self.layers = config['model']['layers']
         self.policy = CustomModel(self.state_size, self.layers, self.action_size)
-        self.seed = config['seed']
         self.lr = config['optimizer']['learning_rate']
-        self.batch_size = config['batch_size']
         self.gamma = config['gamma']
-        self.tau = config['tau']
-        self.update_every = config['update_every']
-        self.layers = config['model']['layers']
         self.optimizer_type = config['optimizer']['type']
         self.device = device
 
