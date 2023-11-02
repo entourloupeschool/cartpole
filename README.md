@@ -1,7 +1,7 @@
 # CartPole Solution with Vanilla Policy Gradient
 ## A reinforcement learning agent trained using the Vanilla Policy Gradient algorithm to solve the CartPole problem from OpenAI's gym.
 ### Introduction
-This project is a reflection of the work and knowledge I've acquired. For a detailed introduction and background on the CartPole problem, please refer to [Gymnasium](https://gymnasium.farama.org/environments/classic_control/cart_pole/).
+For a detailed introduction and background on the CartPole problem, please refer to [Gymnasium](https://gymnasium.farama.org/environments/classic_control/cart_pole/).
 ### Vanilla Policy Gradient
 The Vanilla Policy Gradient (VPG), also known as REINFORCE, is a foundational algorithm in the realm of policy optimization methods. At its heart, VPG seeks to maximize the expected return by directly adjusting the agent's policy. The core idea revolves around increasing the probability of actions that result in higher returns and decreasing the probability of actions leading to lower returns.
 
@@ -15,10 +15,23 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    ``` python
    self.policy = CustomModel(self.state_size, self.layers, self.action_size)
    ```
-3. Collect a set of trajectories by executing the current policy in the environment.
-4. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
-5. Compute the policy gradient estimate using the rewards-to-go.
-6. Update the policy parameters using some variant of gradient ascent.
+3. Collect a set of trajectories by executing the current policy in the environment. This is achieved in the act method where actions are determined based on the current policy:
+   ``` python
+   def act(self, state):
+    ...
+    return action.item()
+   ```
+   The step method logs the rewards for the chosen actions:
+   ``` python
+   def step(self, experiences):
+    obs, reward, termination, truncation, info = experiences
+    self.rewards.append(reward)
+   ```
+
+5. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
+   
+7. Compute the policy gradient estimate using the rewards-to-go.
+8. Update the policy parameters using some variant of gradient ascent.
 
 ### Licence
 This project is licensed under the MIT License.
