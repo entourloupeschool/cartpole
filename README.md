@@ -18,14 +18,14 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
 2. Collect a set of trajectories by executing the current policy in the environment. This is achieved in the act method where actions are determined based on the current policy:
    ``` python
    def act(self, state):
-    # Get action from policy network
-    state = torch.from_numpy(state).float().unsqueeze(0) # Convert state to tensor
-    logits = self.policy(state) # Forward pass
-    # Using softmax to convert logits to probabilities
-    probs = nn.functional.softmax(logits, dim=1) # softmax : probs = exp(logits) / sum(exp(logits))
-    action_distribution = torch.distributions.Categorical(probs) # Categorical distribution : https://pytorch.org/docs/stable/distributions.html#torch.distributions.categorical.Categorical
-    action = action_distribution.sample()
-    return action.item()
+      # Get action from policy network
+      state = torch.from_numpy(state).float().unsqueeze(0) # Convert state to tensor
+      logits = self.policy(state) # Forward pass
+      # Using softmax to convert logits to probabilities
+      probs = nn.functional.softmax(logits, dim=1) # softmax : probs = exp(logits) / sum(exp(logits))
+      action_distribution = torch.distributions.Categorical(probs) # Categorical distribution : https://pytorch.org/docs/stable/distributions.html#torch.distributions.categorical.Categorical
+      action = action_distribution.sample()
+      return action.item()
    ```
    The step method logs the rewards for the chosen actions:
    ``` python
