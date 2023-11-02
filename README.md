@@ -13,7 +13,9 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
 1. Initialize policy parameters θ
    set up the policy network:
    weights are initialized with random values close to 0.
-   `python self.policy = CustomModel(self.state_size, self.layers, self.action_size)`
+   ``` python
+   self.policy = CustomModel(self.state_size, self.layers, self.action_size)
+   ```
 3. Collect a set of trajectories by executing the current policy in the environment.
 4. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
 5. Compute the policy gradient estimate using the rewards-to-go.
