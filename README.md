@@ -46,12 +46,12 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    ```
 4. Compute the policy gradient estimate using the rewards-to-go. The policy gradient is estimated using the stored log probabilities and the computed discounted returns:
    ``` python
-           # Calculating the policy loss
-        policy_loss = [] # List to store the loss for each episode
-        for log_prob, R in zip(self.log_probs, discounted_returns): # Iterate over the log probs and discounted returns
-            policy_loss.append(-log_prob * R) # Append the loss to the list
+   # Calculating the policy loss
+   policy_loss = [] # List to store the loss for each episode
+   for log_prob, R in zip(self.log_probs, discounted_returns): # Iterate over the log probs and discounted returns
+    policy_loss.append(-log_prob * R) # Append the loss to the list
 
-        policy_loss = torch.cat(policy_loss).sum() # Concatenate the loss and sum them up
+   policy_loss = torch.cat(policy_loss).sum() # Concatenate the loss and sum them up
    ```   
 5. Update the policy parameters using some variant of gradient ascent.
 
