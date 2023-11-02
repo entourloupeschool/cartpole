@@ -20,9 +20,6 @@ class Agent():
         self.layers = config['model']['layers']
         self.optimizer_type = config['optimizer']['type']
         self.device = device
-        
-        # init time step (for updating every UPDATE_EVERY steps)
-        self.t_step = 0
 
         self.optimizer = getattr(torch.optim, self.optimizer_type)(
             self.policy.parameters(), lr=self.lr)
@@ -45,16 +42,17 @@ class Agent():
         print("Model loaded from {}".format(path))
 
     def act(self, state):
-        state = torch.from_numpy(state).float().unsqueeze(0)
-        logits = self.policy(state)
+        # Get action from policy network
+        state = torch.from_numpy(state).float().unsqueeze(0) # Convert state to tensor
+        logits = self.policy(state) # Forward pass
         # Using softmax to convert logits to probabilities
-        probs = nn.functional.softmax(logits, dim=1)
-        action_distribution = torch.distributions.Categorical(probs)
-        action = action_distribution.sample()
+        probs = nn.functional.softmax(logits, dim=1) # softmax : probs = exp(logits) / sum(exp(logits))
+        action_distribution = torch.distributions.Categorical(probs) # Categorical distribution : https://pytorch.org/docs/stable/distributions.html#torch.distributions.categorical.Categorical
+        action = action_distribution.sample() # Sample an action from the distribution
 
         # Storing the log probability of the action taken
-        log_prob = action_distribution.log_prob(action)
-        self.log_probs.append(log_prob)
+        log_prob = action_distribution.log_prob(action) # Log probability of the action taken
+        self.log_probs.append(log_prob) # Store log probability for training
 
         return action.item()
 
@@ -65,21 +63,21 @@ class Agent():
 
     def learn(self):
         # Calculate the discounted returns (future cumulative rewards)
-        R = 0
-        discounted_returns = []
-        for r in reversed(self.rewards):
-            R = r + self.gamma * R
-            discounted_returns.insert(0, R)
+        R = 0 # Discounted return
+        discounted_returns = [] # List of discounted returns
+        for r in reversed(self.rewards): # Iterate in reverse order
+            R = r + self.gamma * R # Update discounted return
+            discounted_returns.insert(0, R) # Insert updated discounted return to the front
         
-        discounted_returns = torch.tensor(discounted_returns)
-        discounted_returns = (discounted_returns - discounted_returns.mean()) / (discounted_returns.std() + 1e-5)
+        discounted_returns = torch.tensor(discounted_returns) # Convert to tensor
+        discounted_returns = (discounted_returns - discounted_returns.mean()) / (discounted_returns.std() + 1e-5) # Normalize discounted returns
 
         # Calculating the policy loss
-        policy_loss = []
-        for log_prob, R in zip(self.log_probs, discounted_returns):
-            policy_loss.append(-log_prob * R)
+        policy_loss = [] # List to store the loss for each episode
+        for log_prob, R in zip(self.log_probs, discounted_returns): # Iterate over the log probs and discounted returns
+            policy_loss.append(-log_prob * R) # Append the loss to the list
 
-        policy_loss = torch.cat(policy_loss).sum()
+        policy_loss = torch.cat(policy_loss).sum() # Concatenate the loss and sum them up
 
         # Update policy
         self.optimizer.zero_grad()
@@ -89,20 +87,6 @@ class Agent():
         # Clear the stored rewards and log probs for the next episode
         self.rewards = []
         self.log_probs = []
-
-    # def soft_update(self, local_network, target_network, tau):
-    #     """Soft update model parameters.
-    #     θ_target = τ*θ_local + (1 - τ)*θ_target
-
-    #     Params
-    #     ======
-    #         local_model (PyTorch model): weights will be copied from
-    #         target_model (PyTorch model): weights will be copied to
-    #         tau (float): interpolation parameter 
-    #     """
-    #     for target_param, local_param in zip(target_network.parameters(), local_network.parameters()):
-    #         target_param.data.copy_(
-    #             tau*local_param.data + (1.0-tau)*target_param.data)
 
     def save(self, model_name, model_path):
         self.policy.save(
