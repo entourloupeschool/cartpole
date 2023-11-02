@@ -18,7 +18,13 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
 3. Collect a set of trajectories by executing the current policy in the environment. This is achieved in the act method where actions are determined based on the current policy:
    ``` python
    def act(self, state):
-    ...
+    # Get action from policy network
+    state = torch.from_numpy(state).float().unsqueeze(0) # Convert state to tensor
+    logits = self.policy(state) # Forward pass
+    # Using softmax to convert logits to probabilities
+    probs = nn.functional.softmax(logits, dim=1) # softmax : probs = exp(logits) / sum(exp(logits))
+    action_distribution = torch.distributions.Categorical(probs) # Categorical distribution : https://pytorch.org/docs/stable/distributions.html#torch.distributions.categorical.Categorical
+    action = action_distribution.sample()
     return action.item()
    ```
    The step method logs the rewards for the chosen actions:
@@ -27,9 +33,17 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
     obs, reward, termination, truncation, info = experiences
     self.rewards.append(reward)
    ```
-
 5. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
-   
+   This is done in the learn method, where the discounted cumulative rewards are computed:
+   ``` python
+   R = 0 # Discounted return
+   discounted_returns = [] # List of discounted returns
+   for r in reversed(self.rewards): # Iterate in reverse order
+    R = r + self.gamma * R # Update discounted return
+    discounted_returns.insert(0, R) # Insert updated discounted return to the front
+   discounted_returns = torch.tensor(discounted_returns) # Convert to tensor
+   discounted_returns = (discounted_returns - discounted_returns.mean()) / (discounted_returns.std() + 1e-5) # Normalize discounted returns
+   ```
 7. Compute the policy gradient estimate using the rewards-to-go.
 8. Update the policy parameters using some variant of gradient ascent.
 
