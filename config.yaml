@@ -1,0 +1,61 @@
+# Root directory
+root_directory: /Users/theodoredwernicki/pCloud Drive/pCloud stockageUtile/Documents/code/prove/cartpole/
+
+# Environment settings
+env_name: "CartPole-v1"
+seed: 24
+render_mode: "rgb_array" 
+
+env_action_constraints: 0.05
+
+# Model architecture
+model:
+  layers:
+    - [32, false, 0.0]     
+    - [24, false, 0.0]
+    - [16, false, 0.0]
+    - [12, false, 0.0]
+    - [8, false, 0.0]
+  load: #'models/20231001-093018/'
+  name: 'dqn_model'
+  
+
+# Training settings
+optimizer:
+  type: "Adam"
+  learning_rate: 0.01
+loss_function: "MSELoss"
+number_of_episodes: 551
+max_steps_per_episode: 1000
+epsilon_initial: 1.0
+# epsilon_decay: 0.999999998
+epsilon_decay: 0.1
+epsilon_minimum: 0.01
+gamma: 0.99998  # discount factor
+
+buffer_size: 65000  # replay buffer size
+batch_size: 256       # minibatch size
+tau: 0.001        # soft update of target parameters
+update_every: 4    # how often to update the network
+min_val: 0.0000007      # minimum value for the optimizer's denominator
+
+# Logging and saving
+log_interval: 10
+save_interval: 100
+save_model: true
+model_save_path: "./models/"
+log_path: "./logs/"
+save_results: true
+results_save_path: "./models/"
+show_plots: false
+
+# search for best hyperparameters
+sbhp_n_episodes: 1200
+last_data: 600
+sbhp_render_mode: 
+lr_search: [0.0001, 0.0003, 0.0005, 0.0007]
+eps_init_search: [2.0]
+gamma_search: [0.93, 0.95, 0.97, 0.99]
+tau_search: [0.001]
+update_every_search: [4]
+
