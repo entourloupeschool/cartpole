@@ -7,7 +7,7 @@ import torch
 import datetime
 import math
 import numpy as np
-from init_agent import Agent
+from init_agent import AgentVPG
 from plot_utils import plot_metrics
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

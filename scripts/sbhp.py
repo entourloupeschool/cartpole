@@ -6,9 +6,7 @@ import yaml
 import torch
 import datetime
 import math
-import numpy as np
-from init_agent import Agent
-from plot_utils import plot_metrics
+from init_agent import AgentVPG
 from train_agent import train_agent
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -60,4 +58,3 @@ for lr_i in config['lr_search']:
         agent = Agent(state_size=state_size, action_size=action_size, config=config, device=device)
         # Train the agent
         train_agent(agent, config['sbhp_n_episodes'])
-        
