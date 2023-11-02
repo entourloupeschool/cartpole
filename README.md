@@ -15,7 +15,7 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    ``` python
    self.policy = CustomModel(self.state_size, self.layers, self.action_size)
    ```
-3. Collect a set of trajectories by executing the current policy in the environment. This is achieved in the act method where actions are determined based on the current policy:
+2. Collect a set of trajectories by executing the current policy in the environment. This is achieved in the act method where actions are determined based on the current policy:
    ``` python
    def act(self, state):
     # Get action from policy network
@@ -33,7 +33,7 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
     obs, reward, termination, truncation, info = experiences
     self.rewards.append(reward)
    ```
-4. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
+3. Compute the rewards-to-go as an estimate for Q^π(𝑠,𝑎).
    This is done in the learn method, where the discounted cumulative rewards are computed:
    ``` python
    R = 0 # Discounted return
@@ -44,9 +44,16 @@ Here is a correlation of the VPG's pseudocode and the code in the agent's class:
    discounted_returns = torch.tensor(discounted_returns) # Convert to tensor
    discounted_returns = (discounted_returns - discounted_returns.mean()) / (discounted_returns.std() + 1e-5) # Normalize discounted returns
    ```
-5. Compute the policy gradient estimate using the rewards-to-go.
-   
-6. Update the policy parameters using some variant of gradient ascent.
+4. Compute the policy gradient estimate using the rewards-to-go. The policy gradient is estimated using the stored log probabilities and the computed discounted returns:
+   ``` python
+           # Calculating the policy loss
+        policy_loss = [] # List to store the loss for each episode
+        for log_prob, R in zip(self.log_probs, discounted_returns): # Iterate over the log probs and discounted returns
+            policy_loss.append(-log_prob * R) # Append the loss to the list
+
+        policy_loss = torch.cat(policy_loss).sum() # Concatenate the loss and sum them up
+   ```   
+5. Update the policy parameters using some variant of gradient ascent.
 
 ### Licence
 This project is licensed under the MIT License.
