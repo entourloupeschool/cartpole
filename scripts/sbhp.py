@@ -43,18 +43,13 @@ for layer in config['model']['layers']:
     total_neurons += layer[0]
 print("Total number of neurons: {}".format(total_neurons))
 
-# scale learning rate with number of neurons
-config['optimizer']['learning_rate'] = config['optimizer']['learning_rate'] / \
-    math.sqrt(total_neurons)
-print("Learning rate: {}".format(config['optimizer']['learning_rate']))
-
 # Hyperparameters
 for lr_i in config['lr_search']:
-    config['optimizer']['learning_rate'] = lr_i
+    config['optimizer']['learning_rate'] = lr_i / math.sqrt(total_neurons)
     for gamma_i in config['gamma_search']:
         config['gamma'] = gamma_i
-        print( "lr: {}, gamma: {}".format(lr_i, gamma_i) )
+        print( "lr: {}, gamma: {}".format(config['optimizer']['learning_rate'], config['gamma']) )
         # Initialize the agent
-        agent = Agent(state_size=state_size, action_size=action_size, config=config, device=device)
+        agent = AgentVPG(state_size=state_size, action_size=action_size, config=config, device=device)
         # Train the agent
         train_agent(agent, config['sbhp_n_episodes'])

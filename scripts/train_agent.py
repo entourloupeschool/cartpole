@@ -62,7 +62,7 @@ config['optimizer']['learning_rate'] = config['optimizer']['learning_rate'] / \
 print("Learning rate: {}".format(config['optimizer']['learning_rate']))
 
 # init agent
-agent = Agent(state_size, action_size, config, device)
+agent = AgentVPG(state_size, action_size, config, device)
 
 def train_agent(agent, n_episodes=2000):
     observation, _ = env.reset()
@@ -98,4 +98,4 @@ def train_agent(agent, n_episodes=2000):
         env.render()
     env.close()
     
-train_agent(agent, n_episodes=config["number_of_episodes"])
+# train_agent(agent, n_episodes=config["number_of_episodes"])
