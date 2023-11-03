@@ -2,9 +2,9 @@
 root_directory: /Users/theodoredwernicki/pCloud Drive/pCloud stockageUtile/Documents/code/prove/cartpole/
 
 # Environment settings
-env_name: "CartPole-v1"
+env_name: "CartPole-v1" #"Acrobot-v1" #"CartPole-v1"
 seed: 24
-render_mode: "rgb_array" 
+render_mode: "human" 
 
 env_action_constraints: 0.05
 
