@@ -34,7 +34,10 @@ class CustomModel(nn.Module):
 
     def forward(self, x):
         for layer in self.layers:
-            x = F.relu(layer(x))
+            if isinstance(layer, nn.Linear):
+                x = F.relu(layer(x))
+            else:
+                x = layer(x)
 
         x = self.out_layer(x)
         return x

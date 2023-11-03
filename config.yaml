@@ -42,10 +42,10 @@ min_val: 0.0000007      # minimum value for the optimizer's denominator
 # Logging and saving
 log_interval: 10
 save_interval: 100
-save_model: true
+save_model: false
 model_save_path: "./models/"
 log_path: "./logs/"
-save_results: true
+save_results: false
 results_save_path: "./models/"
 show_plots: false
 
@@ -53,9 +53,9 @@ show_plots: false
 sbhp_n_episodes: 351
 last_data: 600
 sbhp_render_mode: 
-lr_search: [0.02, 0.015, 0.01, 0.005]
+lr_search: [0.015, 0.0125, 0.01]
 eps_init_search: [2.0]
-gamma_search: [0.93, 0.97, 0.99, 99998]
+gamma_search: [0.97, 0.99, 0.99998]
 tau_search: [0.001]
 update_every_search: [4]
 

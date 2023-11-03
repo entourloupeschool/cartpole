@@ -40,8 +40,10 @@ class AgentVPG():
         # Get action from policy network
         state = torch.from_numpy(state).float().unsqueeze(0) # Convert state to tensor
         logits = self.policy(state) # Forward pass
+
         # Using softmax to convert logits to probabilities
         probs = nn.functional.softmax(logits, dim=1) # softmax : probs = exp(logits) / sum(exp(logits))
+
         action_distribution = torch.distributions.Categorical(probs) # Categorical distribution : https://pytorch.org/docs/stable/distributions.html#torch.distributions.categorical.Categorical
         action = action_distribution.sample() # Sample an action from the distribution
 
