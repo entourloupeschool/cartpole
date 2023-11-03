@@ -8,7 +8,6 @@ import datetime
 import math
 from init_agent import AgentVPG
 from train_agent import train_agent
-from rounding import truncate
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 # Load the configuration file
@@ -46,9 +45,9 @@ print("Total number of neurons: {}".format(total_neurons))
 
 # Hyperparameters
 for lr_i in config['lr_search']:
-    config['optimizer']['learning_rate'] = truncate(lr_i / math.sqrt(total_neurons), 5)
+    config['optimizer']['learning_rate'] = round(lr_i / math.sqrt(total_neurons), 5)
     for gamma_i in config['gamma_search']:
-        config['gamma'] = truncate(gamma_i, 5)
+        config['gamma'] = gamma_i
         print( "lr: {}, gamma: {}".format(config['optimizer']['learning_rate'], config['gamma']) )
         # Initialize the agent
         agent = AgentVPG(state_size=state_size, action_size=action_size, config=config, device=device)
